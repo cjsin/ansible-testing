@@ -1,0 +1,4 @@
+---
+# tasks file for playbooks/roles/common
+
+# - import_tasks: task1.yml

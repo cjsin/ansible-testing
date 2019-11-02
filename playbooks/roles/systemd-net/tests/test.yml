@@ -1,0 +1,6 @@
+---
+- hosts: ans-node
+  remote_user: root
+  roles:
+    - playbooks/roles/systemd-net
+

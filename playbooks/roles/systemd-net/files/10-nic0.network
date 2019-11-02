@@ -1,0 +1,5 @@
+# Note this file must have a numeric prefix to be considered before 99-default.link
+[Match]
+Name=nic0
+[Network]
+DHCP=ipv4

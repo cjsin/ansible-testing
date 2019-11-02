@@ -1,0 +1,8 @@
+---
+# tests for common role
+
+- hosts: ans-node
+  remote_user: root
+  roles:
+    - playbooks/roles/common
+

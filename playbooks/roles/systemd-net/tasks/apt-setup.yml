@@ -1,0 +1,20 @@
+---
+# prepare the system for doing apt installs
+
+- name: setup-apt-proxy
+  copy:
+    dest: /etc/apt/apt.conf.d/01-proxy
+    content: |
+      Acquire::HTTP::Proxy "{{APT_PROXY}}";
+      Acquire::HTTPS::Proxy "false";
+  register: apt_proxy
+  when: 'APT_PROXY != ""'
+
+- name: delete-apt-proxy
+  file: path=/etc/apt/apt.conf.d/01-proxy state=absent
+  register: apt_proxy
+  when: 'APT_PROXY == ""'
+
+- name: apt-get update
+  apt:  update_cache=yes
+  when: apt_proxy.changed

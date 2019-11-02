@@ -1,0 +1,14 @@
+[Unit]
+After=network.target systemd-networkd-wait-online.target remote-fs-pre.target
+Requires=network.target
+Before=shutdown.target
+[Service]
+Type=oneshot
+RemainAfterExit=true
+Environment=PORTAL=portal
+ExecStartPre=-/usr/sbin/iscsiadm --mode discovery --type sendtargets --portal PORTAL
+ExecStartPre=-/usr/sbin/iscsiadm --mode discovery --type sendtargets --portal PORTAL -l
+ExecStartPre=-/usr/bin/mount -a
+ExecStart=/bin/true
+[Install]
+WantedBy=default.target

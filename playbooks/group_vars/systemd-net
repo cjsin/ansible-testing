@@ -1,0 +1,4 @@
+---
+# vars for hosts in systemd-net example
+
+role_purpose: experimenting with systemd

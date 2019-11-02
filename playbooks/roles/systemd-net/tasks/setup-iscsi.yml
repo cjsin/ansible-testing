@@ -1,0 +1,45 @@
+---
+# set up iscsi and prepare docker storage on it
+
+- name: Install packages
+  apt:
+    name:
+      - open-iscsi
+      - xfsprogs
+  register: packages
+
+- name: Install script
+  copy: src={{item}} mode=0755 dest=/root
+  register: script_files
+  with_items:
+    - guest-docker.sh
+
+- name: Install guest-docker systemd units
+  copy: src={{item}} mode=0644 dest=/etc/systemd/system
+  register: guest_services
+  with_items:
+    - guest-docker.service
+    - guest-docker.path
+
+- name: Install iscsi discovery systemd unit
+  copy: src=open-iscsi-discovery.service mode=0644 dest=/etc/systemd/system
+  register: iscsi_services
+
+- name:     determine scsi portal which is the host IP ie the gateway
+  shell:    ip route | egrep default.via | awk '{print $3}'
+  register: PORTAL
+  changed_when: false
+
+- name:       add portal to host file
+  lineinfile: create=no state=present path=/etc/hosts line="{{PORTAL.stdout}} portal"
+  when:       'PORTAL != ""'
+  register:   portal_var
+
+- name:    enable
+  systemd: name={{item}} daemon_reload=yes enabled=yes state=restarted
+  with_items:
+    - open-iscsi.service
+    - guest-docker.path
+    - open-iscsi-discovery.service
+  when: script_files.changed or guest_services.changed or iscsi_services.changed or portal_var.changed
+

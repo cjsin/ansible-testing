@@ -1,0 +1,82 @@
+---
+# set up systemd networkd
+
+# Install ethtool to support network device driver identification
+- name: Install ethtool
+  apt:  name=ethtool
+
+# Set up a service for delaying the network stop so we can see what is happening during shutdown
+- name: Install systemd service
+  copy: src=delay-net-stop.service mode=0644 dest=/etc/systemd/system/
+
+- name: check for /etc/network/interfaces
+  stat: path=/etc/network/interfaces
+  register: debian_networking_enabled
+
+- name: disable debian networking
+  command: mv {{a}} {{b}}
+  vars:
+    a: /etc/network/interfaces
+    b: /etc/network/interfaces.OLD
+  args:
+    chdir: /etc/network
+    creates: '{{b}}'
+    removes: '{{a}}'
+  when: debian_networking_enabled.stat.exists
+
+- name: Install script
+  copy: src=delay-net-stop.sh mode=0755 dest=/root/
+
+- name: Install systemd network file
+  copy: src={{item}} mode=0644 dest=/etc/systemd/network/
+  with_items:
+    - 20-eth0.link
+    - 10-nic0.network
+
+- name: Install systemd dropin
+  copy: src=systemd-networkd-debug.conf mode=0644 dest=/etc/systemd/system/systemd-networkd.service.d/
+
+- name: check ip links
+  command: ip link
+  register: ip_links
+  changed_when: false
+
+#- name: take link down
+#  command: ip link set eth0 down
+#  when: ip_links|search('eth0.*UP')
+
+- name:    enable systemd networking
+  systemd: daemon_reload=yes name=systemd-networkd.service enabled=yes state=started
+
+- name: trigger network device rename
+  when: ip_links|join('') is search('eth0')
+  shell: |
+      ip link set eth0 down
+      udevadm trigger
+      udevadm info /sys/class/net/eth0
+      udevadm test /sys/class/net/eth0
+      systemctl restart systemd-networkd
+      networkctl status
+      networkctl list
+      rm -f /var/log/.initrd-rebuilt
+
+  #changed_when: '"\n0 metadata files removed" not in yum_clear.stdout'
+
+#- name:    enable delay-net-stop
+#  systemd: name=delay-net-stop.service daemon_reload=yes enabled=yes started=yes
+
+- name:    disable debian networking
+  systemd: name=networking.service enabled=no state=stopped
+
+# rebuild the initrd so the next boot starts with the correct network configuration
+
+- name: check if initrd needs to be rebuilt
+  stat: path=/var/log/.initrd-rebuilt
+  register: initrd_rebuilt
+
+# Update the initrd so the network config comes up correctly the first time after a reboot
+- name: rebuild initrd
+  shell: update-initramfs -u && touch /var/log/.initrd-rebuilt
+  when: not initrd_rebuilt.stat.exists
+  tags:
+    - initrd

@@ -1,0 +1,4 @@
+---
+# handlers file for playbooks/roles/example
+
+- include_tasks: restart-systemd-networkd.yml

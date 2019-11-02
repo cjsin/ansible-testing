@@ -1,0 +1,7 @@
+# Note this file must have a numeric prefix to be considered before 99-default.link
+[Match]
+Driver=e1000
+OriginalName=eth0
+[Link]
+NamePolicy=
+Name=nic0

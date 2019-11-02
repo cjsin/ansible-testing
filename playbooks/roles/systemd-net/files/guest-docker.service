@@ -1,0 +1,11 @@
+[Unit]
+Requires=open-iscsi.service
+After=network.target open-iscsi.service
+Before=shutdown.target
+Before=remote-fs-pre.target
+
+[Service]
+ExecStart=/root/guest-docker.sh
+
+[Install]
+WantedBy=default.target

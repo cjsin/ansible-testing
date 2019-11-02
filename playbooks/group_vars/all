@@ -1,0 +1,4 @@
+---
+# vars for all host groups
+
+vagrant_host: 192.168.122.1

@@ -1,0 +1,18 @@
+[Unit]
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+Environment=IMAGE=busybox:latest
+# Clear start timeout because the docker pull can take some time
+TimeoutStartSec=0
+TimeoutStopSec=15
+ExecStop=-/usr/bin/docker stop %p
+ExecStartPre=-/usr/bin/docker pull $IMAGE
+ExecStartPre=-/usr/bin/docker stop %p
+ExecStartPre=-/usr/bin/docker rm %p
+ExecStart=/usr/bin/docker run -d --name %p -v /dev/tty1:/dev/tty1 -v /root/long-runner.sh:/entrypoint.sh $IMAGE /entrypoint.sh
+
+[Install]
+WantedBy=default.target

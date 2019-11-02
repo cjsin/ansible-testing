@@ -1,0 +1,5 @@
+---
+# set up the console to be more convenient to use
+
+- name: Install gpm for convenience
+  apt: name=gpm state=present #update_cache=yes

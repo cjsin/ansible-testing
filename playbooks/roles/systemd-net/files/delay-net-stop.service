@@ -1,0 +1,14 @@
+[Unit]
+Description=Pause during net stop
+DefaultDependencies=no
+Conflicts=shutdown.target
+After=network.target
+Before=shutdown.target
+SuccessAction=none
+FailureAction=none
+[Service]
+ExecStart=
+ExecStop=/root/delay-net-stop.sh
+RemainAfterExit=true
+[Install]
+WantedBy=default.target

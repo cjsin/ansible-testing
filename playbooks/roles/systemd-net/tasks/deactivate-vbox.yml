@@ -1,0 +1,8 @@
+---
+# tasks file for playbooks/roles/example
+
+- name: disable and stop
+  systemd: name={{item}} state=stopped enabled=no
+  with_items:
+    - vboxadd
+    - vboxadd-service

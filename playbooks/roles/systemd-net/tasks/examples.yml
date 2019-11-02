@@ -1,0 +1,14 @@
+---
+# examples
+
+#- name: Node.js - Execute installation script
+#  shell: "{{ var_node }}/nodejs.sh"
+
+# - name: debug output
+# debug: msg={{ stdout }}
+#  name: added in 2.4, previously you used 'include'
+#   import_tasks: redhat.yml
+#   when: ansible_facts['os_family']|lower == 'redhat'
+# - import_tasks: debian.yml
+#   when: ansible_facts['os_family']|lower == 'debian'
+#   motd_value: "{{ lookup('file', '/etc/motd') }}"

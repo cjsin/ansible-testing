@@ -1,0 +1,13 @@
+[Unit]
+Requires=network.target
+Before=docker.service
+After=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=
+ExecStop=-/bin/bash -c "echo Docker has stopped > /dev/tty1; echo Pausing a little; sleep 10"
+
+[Install]
+WantedBy=multi-user.target
