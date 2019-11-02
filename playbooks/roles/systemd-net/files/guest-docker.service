@@ -5,7 +5,9 @@ Before=shutdown.target
 Before=remote-fs-pre.target
 
 [Service]
+Timeout=0
+ExecStartPre=/root/wait-for-path.sh /dev/disk/by-label/guest-docker
 ExecStart=/root/guest-docker.sh
 
 [Install]
-WantedBy=default.target
+# Note this service is not installed but should be activated by guest-docker.path

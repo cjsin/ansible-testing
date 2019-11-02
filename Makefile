@@ -21,4 +21,5 @@ lint:
 	#ansible-playbook --syntax-check $(PLAYBOOK) -i all
 
 play:
-	 $(ANS_REMOTE) --limit="$(TEST_NODE)" $(PLAYBOOK)
+	 $(ANS_REMOTE) --limit="$(TEST_NODE)" $(PLAYBOOK) $(TAGS)
+

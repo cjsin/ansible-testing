@@ -24,7 +24,7 @@ function inf()
 
 function check_dev()
 {
-    dev_by_path=$(ls /dev/disk/by-path/*"${label}"* | head -n1)
+    dev_by_path=$(ls "/dev/disk/by-label/${label}" 2> /dev/null | head -n1)
     if [[ -z "${dev_by_path}" ]]
     then
         err "No device found for label ${label}"
@@ -76,12 +76,27 @@ function check_fstab()
     fi
 }
 
+function toolish_xfs_process()
+{
+    if ! xfs_repair "${dev}"
+    then
+        local tmp_mount="/mnt/${label}-fs-check"
+        mkdir -p "${tmp_mount}"
+        # xfs will replay logs when mounted.
+        mount "${dev}" "${tmp_mount}" || echo "Mount ${dev} failed."
+        # now unmount for the xfs_repair to run
+        umount "${dev}"
+        rmdir "${tmp_mount}"
+        xfs_repair "${dev}"
+    fi
+}
+
 function run_fsck()
 {
     case "${fs_type}"
     in
         xfs)
-            xfs_repair "${dev}"
+            toolish_xfs_process "${dev}"
             ;;
         *)
             fsck "${dev}"
@@ -116,7 +131,9 @@ function mount_filesystem()
 
 check_dev        || exit 1
 check_mounted    && exit 0
-check_mkfs       || exit 1
+#check_mkfs       || exit 1
 check_fstab
 check_filesystem || exit 1
-mount_filesystem || exit 1
+
+systemctl start guest-docker.mount
+#mount_filesystem || exit 1

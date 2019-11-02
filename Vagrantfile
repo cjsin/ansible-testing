@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
     #config.vm.provision "shell", privileged: true, inline: settings['VAGRANT_SRCS'] + "/provision.sh"
 
     config.vm.provision :ansible do |ansible|
-        ansible.verbose = "vvvvv"
+        ansible.verbose = "v"
         ansible.playbook = "playbooks/site.yml"
         ansible.compatibility_mode = "2.0"
         ansible.become = true

@@ -1,5 +1,7 @@
 [Unit]
+
 [Path]
-PathExistsGlob=/dev/disk/by-path/*guest-docker*
+PathExistsGlob=/dev/disk/by-path/guest-docker
+
 [Install]
 WantedBy=default.target

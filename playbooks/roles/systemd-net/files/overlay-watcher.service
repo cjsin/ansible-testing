@@ -1,0 +1,10 @@
+[Unit]
+After=docker.service var-lib-docker.mount
+Requires=docker.service var-lib-docker.mount
+
+[Service]
+Type=simple
+ExecStart=/root/overlay-watcher.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -2,7 +2,7 @@
 After=docker.service
 
 [Service]
-Type=oneshot
+Type=simple
 RemainAfterExit=true
 Environment=IMAGE=busybox:latest
 # Clear start timeout because the docker pull can take some time

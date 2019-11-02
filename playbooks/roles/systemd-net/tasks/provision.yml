@@ -27,6 +27,8 @@
   tags: network
 - include_tasks: setup-iscsi.yml
   tags: iscsi
+- include_tasks: setup-guest-docker.yml
+  tags: guest-docker
 - include_tasks: setup-docker.yml
   tags: docker
 - include_tasks: long-runner.yml
