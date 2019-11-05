@@ -1,0 +1,70 @@
+if &compatible
+    set nocompatible
+end
+
+set encoding=utf-8
+let mapleader=" "
+" set ruler
+" set noswapfile
+set history=50
+set incsearch
+set laststatus=2
+
+if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
+    syntax on
+endif
+
+filetype plugin on
+
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+
+set list listchars=tab:»·,trail:·,nbsp:·
+
+set tabstop=4
+set shiftwidth=4
+set shiftround
+set expandtab
+
+let g:is_posix = 1
+
+set nojoinspaces
+
+set textwidth=80
+set colorcolumn=+1
+
+"set number
+"set numberwidth=5
+set nonumber
+
+set wildmode=list:longest,list:full
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col -1] !~ '\k'
+        return "\<Tab>"
+    else
+        return "\<C-p>"
+    endif
+endfunction
+
+inoremap <Tab> <C-r>=InsertTabWrapper()<CR>
+inoremap <S-Tab> <C-n>
+
+" switch between two last files
+nnoremap <Leader><Leader> <C-^>
+
+let g:html_indent_tags = 'li\|p'
+
+nnoremap <Leader>r :RunInInteractiveShell<Space>
+
+set splitbelow
+set splitright
+
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+
+nnoremap <c-P> :Files<cr>
+
+set diffopt+=vertical
+set tags^=.git/tags

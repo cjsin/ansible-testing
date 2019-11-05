@@ -1,0 +1,11 @@
+---
+# Install a service to delay network stop just so
+# we can see if the other services are stopped first
+# or if they're correctly delayed until after network stop.
+
+- name: Install script
+  copy: src=delay-net-stop.sh mode=0755 dest=/root/
+
+# Set up a service for delaying the network stop so we can see what is happening during shutdown
+- name: Install systemd service
+  copy: src=delay-net-stop.service mode=0644 dest=/etc/systemd/system/

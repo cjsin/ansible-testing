@@ -1,0 +1,20 @@
+---
+# disable vbox stuff when running in qemu
+
+- name:     check if vbox is running
+  command:  lsmod
+  register: lsmod
+
+- name:     remove vbox module
+  command:  rmmod vbox
+  register: vbox_removed
+  when:     lsmod.stdout is search('vbox')
+
+#- debug:    var=lsmod
+
+- name:     disable and stop virtualbox host support
+  systemd:  name={{item}} state=stopped enabled=no
+  with_items:
+    - vboxadd
+    - vboxadd-service
+  when:     vbox_removed.changed

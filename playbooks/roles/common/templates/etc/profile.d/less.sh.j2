@@ -1,0 +1,9 @@
+
+# -i - case insensitive search
+# -Q - mute the bell
+# -X - do not send termcap screen init / deinit (ie don't clear the screen)
+# -R - raw mode (allow ansii color codes through)
+export LESS="-iQXR"
+
+# specifying LESSCHARSET properly in particular allows systemd to show bullets correctly
+export LESSCHARSET="utf-8"

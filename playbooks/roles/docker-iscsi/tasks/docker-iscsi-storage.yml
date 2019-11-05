@@ -1,0 +1,23 @@
+---
+# set up guest-docker mount and services
+
+- name: Install script
+  copy: src={{item}} mode=0755 dest=/root
+  register: script_files
+  with_items:
+    - var-lib-docker.sh
+    - wait-for-path.sh
+
+- name: Install guest-docker systemd units
+  copy: src={{item}} mode=0644 dest=/etc/systemd/system
+  register: guest_services
+  with_items:
+    - var-lib-docker.service
+    - var-lib-docker.mount
+    - var-lib-docker.path
+
+- name:    enable
+  systemd: name={{item}} daemon_reload=yes enabled=yes state=restarted
+  with_items:
+    - var-lib-docker.path
+  when: script_files.changed or guest_services.changed

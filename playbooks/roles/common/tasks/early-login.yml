@@ -1,0 +1,7 @@
+---
+# Why on earth would you prevent maintainer logins early in the boot process?
+
+- name: Fix TTY start dependencies
+  copy: src=fix-getty-deps.conf mode=0644 dest=/etc/systemd/system/getty@.service.d/
+
+# And why on earth would you not allow ssh logins till very late, at least for root?

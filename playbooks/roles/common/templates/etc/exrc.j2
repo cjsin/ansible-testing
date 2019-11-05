@@ -1,0 +1,9 @@
+" dont worry about vi compatibility - in particular fix arrow key ABCD issue
+set nocompatible
+" allow to use backspace on \n
+set backspace=indent,eol,start
+" allow to delete previous linefeed
+set whichwrap+=<,>,h,l,[,]
+set showmode
+set nomesg
+:map #1 :!less ~/.vi_help^M

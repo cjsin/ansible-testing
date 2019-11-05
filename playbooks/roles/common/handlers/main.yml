@@ -1,9 +1,4 @@
 ---
-# handlers file for playbooks/roles/example
+# handlers file for playbooks/roles/common
 
-# Handler to handle common notifications. Handlers are called by other plays.
-# See http://docs.ansible.com/playbooks_intro.html for more information about handlers.
-
-- name: systemctl reload
-  systemd: daemon_reload=yes
-
+- include_tasks: restart-systemd-networkd.yml

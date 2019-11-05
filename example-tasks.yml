@@ -1,0 +1,14 @@
+---
+# examples
+
+# - name: debug output
+#   debug: msg={{ stdout }}
+
+# - import_tasks: debian.yml
+#   when: ansible_facts['os_family']|lower == 'debian'
+
+# example of lookups
+#  motd_value: "{{ lookup('file', '/etc/motd') }}"
+
+# example condition and change regsitration
+#  changed_when: '"\n0 metadata files removed" not in yum_clear.stdout'

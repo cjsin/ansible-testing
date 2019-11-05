@@ -1,7 +1,7 @@
 PLAYBOOKS := playbooks
 PLAYBOOK  := $(PLAYBOOKS)/site.yml
 INVENTORY   :=  $(PWD)/.vagrant/provisioners/ansible/inventory
-ANS_VERBOSE :=
+ANS_VERBOSE ?=
 ANS_CONN    := --connection=ssh --timeout=30
 ANS_REMOTE  := ansible-playbook $(ANS_CONN)  $(ANS_VERBOSE) --become --inventory-file=$(INVENTORY)
 TEST_NODE   := ans-node

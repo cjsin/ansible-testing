@@ -1,0 +1,13 @@
+[Unit]
+Requires=open-iscsi.service
+After=network.target open-iscsi.service
+Before=shutdown.target
+After=remote-fs-pre.target
+
+[Service]
+TimeoutSec=0
+ExecStartPre=/root/wait-for-path.sh /dev/disk/by-label/guest-docker
+ExecStart=/root/var-lib-docker.sh
+
+[Install]
+# Note this service is not installed but should be activated by guest-docker.path

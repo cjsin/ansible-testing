@@ -1,9 +1,0 @@
----
-- name: apply common configuration to all nodes
-  hosts: all
-  # handlers:
-  #   - include_tasks: systemd-reload.yml
-  remote_user: root
-  roles:
-    - common
-    - systemd-net

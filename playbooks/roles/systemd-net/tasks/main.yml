@@ -1,4 +1,5 @@
 ---
-# tasks file for playbooks/roles/example
+# tasks file for playbooks/roles/systemd-net
 
-- import_tasks: provision.yml
+- include_tasks: setup-networkd.yml
+  tags: network

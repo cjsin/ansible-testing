@@ -1,0 +1,15 @@
+---
+# tasks file for playbooks/roles/docker-iscsi
+
+- include_tasks: setup-iscsi.yml
+  tags: iscsi
+- include_tasks: docker-iscsi-storage.yml
+  tags: docker
+- include_tasks: setup-docker.yml
+  tags: docker
+- include_tasks: docker-on-iscsi.yml
+  tags: docker-on-iscsi
+- include_tasks: delay-net-stop.yml
+  tags: delay-net-stop
+- include_tasks: long-runner.yml
+  tags: custom-services

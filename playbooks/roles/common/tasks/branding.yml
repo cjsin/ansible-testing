@@ -1,0 +1,5 @@
+---
+# branding, motd, logos, etc
+
+- name: motd, debian-style
+  copy: content='ansible-testing vagrant+ansible setup' dest=/etc/update-motd.d/ansible-testing mode=0755

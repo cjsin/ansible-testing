@@ -1,0 +1,29 @@
+---
+# Decent environment and settings for the maintainer (root)
+
+- name: vim config
+  template: src=etc/vimrc.j2 dest=/etc/vimrc
+
+- name: inputrc
+  template: src=etc/inputrc.j2 dest=/etc/inputrc
+
+- name: exrc
+  template: src=etc/exrc.j2 dest=/etc/exrc
+
+- name: bashrc
+  template: src=etc/bash.bashrc.j2 dest=/etc/bash.bashrc
+
+- name: less
+  template: src=etc/profile.d/less.sh.j2 dest=/etc/profile.d/less.sh
+
+- name: manpager
+  template: src=etc/profile.d/man.sh.j2 dest=/etc/profile.d/man.sh
+
+- name: bash completion
+  template: src=etc/profile.d/completion.sh.j2 dest=/etc/profile.d/completion.sh
+
+- name: systemd env
+  template: src=etc/profile.d/systemd.sh.j2 dest=/etc/profile.d/systemd.sh
+
+#- name: sudo
+

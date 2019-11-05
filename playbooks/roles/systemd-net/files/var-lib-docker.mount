@@ -1,9 +1,0 @@
-[Unit]
-Before=remote-fs.target
-Requires=guest-docker.service
-After=guest-docker.service
-[Mount]
-Where=/var/lib/docker
-What=/dev/disk/by-label/guest-docker
-Type=xfs
-Options=defaults,noauto,_netdev

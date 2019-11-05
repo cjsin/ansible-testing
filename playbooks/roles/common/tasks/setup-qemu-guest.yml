@@ -1,0 +1,14 @@
+---
+# set up qemu guest agent for running in qemu virtual machine
+
+- name:     Install qemu guest agent
+  apt:      name=qemu-guest-agent state=present
+  register: qemu_ga_installed
+
+- name:     systemctl daemon-reload
+  systemd:  daemon_reload=yes
+  when:     qemu_ga_installed.changed
+
+- name:     udevadm-trigger
+  command:  udevadm trigger
+  when:     qemu_ga_installed.changed

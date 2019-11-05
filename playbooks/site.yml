@@ -2,10 +2,14 @@
 # This playbook deploys the whole application stack in this site.
 
 - hosts: all
+
   #gather_facts: no
+
   vars_files:
     - vagrant.yml
+
   pre_tasks:
+
     - name: gather minimal facts - in particular we need ansible_date_time
       setup:
         gather_subset:
@@ -16,8 +20,9 @@
     - name: check apt last update
       stat: path=/var/cache/apt
       register: apt_cache_stat
+
     - name: update apt if needed
       apt: update_cache=yes
       when: ansible_date_time.epoch|float - apt_cache_stat.stat.mtime > 60*60*12
 
-- import_playbook: systemd-net.yml
+- import_playbook: ansible-testing.yml

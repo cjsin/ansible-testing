@@ -1,0 +1,27 @@
+---
+# Create a long running service just intended to ensure the docker
+# storage filesystems are in use at shutdown time (for testing the
+# shutdown ordering)
+
+- name: Prepare busyboxy image
+  docker_image: name=busybox:latest
+
+- name: Install script
+  copy: src={{item}} mode=0755 dest=/root
+  register: scripts
+  with_items:
+    - long-runner.sh
+
+- name: Install systemd unit
+  copy: src={{item}} mode=0644 dest=/etc/systemd/system
+  register: services
+  with_items:
+    - long-runner.service
+    - docker-stopped.service
+
+- name: Enable and start
+  systemd: name={{item}} daemon_reload=yes state=started enabled=yes
+  when: services.changed or scripts.changed
+  with_items:
+    - long-runner.service
+    - docker-stopped.service
