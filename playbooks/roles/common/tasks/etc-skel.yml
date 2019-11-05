@@ -1,5 +1,5 @@
 ---
-# Decent environment and settings for the maintainer (root)
+# Decent environment and settings for the users (/etc/skel)
 
 - name: Ensure directory structure exists
   file:
@@ -7,15 +7,6 @@
     state: directory
   with_filetree: '../templates/etc/skel'
   when: item.state == 'directory'
-  tags:
-    - skel
-
-- name: Ensure files are populated from templates
-  debug: msg="src={{item.src}}  dest= '/etc/skel/{{ (item.path | regex_replace( "(^|/)dot-", "\1.") | splitext)[0] }}"
-  with_filetree: ../templates/etc/skel
-  when: item.state == 'file'
-  loop_control:
-    label: "{{ item.path }}"
   tags:
     - skel
 
@@ -29,6 +20,3 @@
     label: "{{ item.path }}"
   tags:
     - skel
-
-#- name: sudo
-
