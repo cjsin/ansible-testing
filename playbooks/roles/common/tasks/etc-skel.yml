@@ -3,7 +3,7 @@
 
 - name: Ensure directory structure exists
   file:
-    path: '/etc/skel/{{ item.path | regex_replace( "(^|/)dot-", "\\1.") }}'
+    path: '/etc/skel/{{ item.path | regex_replace( "(^|/)dot-", "\1.") }}'
     state: directory
   with_filetree: '../templates/etc/skel'
   when: item.state == 'directory'
@@ -11,7 +11,7 @@
     - skel
 
 - name: Ensure files are populated from templates
-  debug: msg="src={{item.src}}  dest= '/etc/skel/{{ (item.path | regex_replace( "(^|/)dot-", "\\1.") | splitext)[0] }}"
+  debug: msg="src={{item.src}}  dest= '/etc/skel/{{ (item.path | regex_replace( "(^|/)dot-", "\1.") | splitext)[0] }}"
   with_filetree: ../templates/etc/skel
   when: item.state == 'file'
   loop_control:
@@ -22,7 +22,7 @@
 - name: Ensure files are populated from templates
   template:
     src: '{{ item.src }}'
-    dest: '/etc/skel/{{ (item.path | regex_replace( "(^|/)dot-", "\\1.") | splitext)[0] }}'
+    dest: '/etc/skel/{{ (item.path | regex_replace( "(^|/)dot-", "\1.") | splitext)[0] }}'
   with_filetree: ../templates/etc/skel
   when: item.state == 'file'
   loop_control:
