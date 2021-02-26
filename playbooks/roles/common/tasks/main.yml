@@ -3,10 +3,6 @@
 
 - import_tasks: apt-setup.yml
   tags: apt-setup
-- import_tasks: deactivate-vbox.yml
-  tags: vm-guest
-- import_tasks: setup-qemu-guest.yml
-  tags: vm-guest
 - import_tasks: setup-console.yml
   tags: console
 - import_tasks: early-login.yml
@@ -17,7 +13,7 @@
   tags: env
 - import_tasks: etc-skel.yml
   tags: skel
+- import_tasks: profile-setup.yml
+  tags: profile
 - import_tasks: branding.yml
   tags: branding
-
-

@@ -1,0 +1,5 @@
+---
+# tasks file for roles/splash-screen
+
+- include_tasks: setup-splash.yml
+  tags: splash

@@ -1,0 +1,5 @@
+- set_fact:
+    profile_block: "{{ lookup('template', 'templates/etc/profile.j2') }}"
+
+- name: etc-profile
+  blockinfile: path=/etc/profile group=root owner=root mode=0644 state=present block='{{ profile_block }}'

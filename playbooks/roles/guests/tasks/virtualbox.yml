@@ -1,0 +1,29 @@
+---
+# disable vbox stuff when running in qemu
+
+- name:         check loaded kernel modules
+  command:      lsmod
+  changed_when: false
+  register:     lsmod
+
+- set_fact:
+    vbox_services:
+      - vboxadd
+      - vboxadd-service
+
+# - name:       debug output
+#   debug:      msg='{{lsmod}}'
+
+- name:       vbox service exists
+  stat:       path=/lib/systemd/system/vboxadd.service
+  register:   vbox_support
+
+- name:       disable and stop virtualbox host support
+  systemd:    name={{item}} state=stopped enabled=no
+  with_items: '{{vbox_services}}'
+  when:       vbox_support.stat.exists and not lsmod.stdout is search('"vboxguest ')
+
+- name:       enable and start virtualbox host support
+  systemd:    name={{item}} state=stopped enabled=no
+  with_items: '{{vbox_services}}'
+  when:       vbox_support.stat.exists and lsmod.stdout is search('"vboxguest ')

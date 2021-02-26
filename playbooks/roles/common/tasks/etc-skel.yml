@@ -1,6 +1,12 @@
 ---
 # Decent environment and settings for the users (/etc/skel)
 
+- name: debug ansible bullshit
+  debug: msg='/etc/skel/{{ item.path | regex_replace( "(^|/)dot-", "\1.") }}'
+  with_filetree: '../templates/etc/skel'
+  tags:
+    - skel
+
 - name: Ensure directory structure exists
   file:
     path: '/etc/skel/{{ item.path | regex_replace( "(^|/)dot-", "\1.") }}'

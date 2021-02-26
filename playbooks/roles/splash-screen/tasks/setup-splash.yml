@@ -1,0 +1,31 @@
+
+- name: splash-packages
+  apt:  state=present name='{{['plymouth-themes','plymouth-theme-*']}}'
+
+- name:     clone plymouth-themer
+  git:      dest=/root/plymouth-themer depth=1 repo=https://github.com/cjsin/plymouth-themer.git
+  register: splash_repo_updated
+
+- name: set themer options
+  set_fact:
+      THEMER_OPTIONS: ALTERNATIVE_WAITER=1 EARLY_TTYS=1 SELECT_THEME=1 REBUILD_INITRD=1 THEME=example VARIANT=dudebarf RENAME=themer
+  register: themer_options
+
+
+- name: setup themer
+  command: ./install.sh {{THEMER_OPTIONS}}
+  args:
+    chdir: /root/plymouth-themer
+  when: splash_repo_updated.changed or themer_options.changed
+
+- name: enable splash in boot
+  lineinfile:
+      path: /etc/default/grub
+      regexp: ^(GRUB_CMDLINE_LINUX_DEFAULT)="(quiet)"
+      backrefs: yes
+      line: \1="\2 splash"
+  register: grub_options
+
+- name: update grub
+  command: update-grub2
+  when: grub_options.changed

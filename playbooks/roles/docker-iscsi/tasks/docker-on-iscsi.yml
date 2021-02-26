@@ -3,16 +3,18 @@
 
 - name:    Configure docker for iscsi
   copy:    src=docker-on-iscsi.conf    mode=0644 dest=/etc/systemd/system/docker.service.d/
+  notify:  docker-restarted
 
 - name:    Configure overlay watcher service
   copy:    src=overlay-watcher.service mode=0644 dest=/etc/systemd/system/
+  notify:  docker-restarted
 
 - name:    Configure overlay watcher script
   copy:    src=overlay-watcher.sh      mode=0755 dest=/root/
+  notify:  docker-restarted
 
 - name:    enable overlay watcher
   systemd: name=overlay-watcher.service daemon_reload=yes enabled=yes state=started
+  notify:  docker-restarted
 
-- name:    restart docker
-  systemd: name=docker.service          daemon_reload=yes enabled=yes state=restarted
-
+- meta:    flush_handlers

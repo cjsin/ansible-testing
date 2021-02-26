@@ -1,2 +1,5 @@
 ---
 # handlers file for playbooks/roles/docker-iscsi
+
+- name:    docker-restarted
+  systemd: name=docker.service daemon_reload=yes enabled=yes state=restarted

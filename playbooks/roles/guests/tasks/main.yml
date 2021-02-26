@@ -1,0 +1,7 @@
+---
+# tasks file for playbooks/roles/guests
+
+- import_tasks: virtualbox.yml
+  tags: virtualbox-guest
+- import_tasks: qemu.yml
+  tags: qemu-guest

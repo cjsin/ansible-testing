@@ -8,12 +8,17 @@
     - var-lib-docker.sh
     - wait-for-path.sh
 
+# Note we can't use the mount unit because systemd is retarded and
+# will mount it whenever it likes, despite any noauto option, and before
+# we've had a chance to check the filesystem etc. Instead we have to eschew
+# the use of any mount unit and manually specify the mount options when we
+# mount it.
 - name: Install guest-docker systemd units
   copy: src={{item}} mode=0644 dest=/etc/systemd/system
   register: guest_services
   with_items:
     - var-lib-docker.service
-    - var-lib-docker.mount
+    #- var-lib-docker.mount
     - var-lib-docker.path
 
 - name:    enable
@@ -21,3 +26,6 @@
   with_items:
     - var-lib-docker.path
   when: script_files.changed or guest_services.changed
+  notify:  docker-restarted
+
+- meta: flush_handlers

@@ -22,7 +22,8 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = settings['VM_NAME']
     config.vm.box      = settings['BOX']
     config.vm.box_check_update = false
-    #config.vm.network       :private_network, ip: settings['IPADDR']
+    config.vm.network  :public_network, ip: settings['IPADDR']
+    #config.vm.network  :private_network, ip: settings['IPADDR']
     config.vm.synced_folder './',             '/vagrant',               type: 'nfs', disabled: true
     config.vm.synced_folder settings['SRCS'], settings['VAGRANT_SRCS'], type: '9p',  disabled: false, accessmode: "mapped"
 

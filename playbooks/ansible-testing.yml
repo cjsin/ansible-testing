@@ -6,5 +6,7 @@
   remote_user: root
   roles:
     - common
+    - guests
     - systemd-net
     - docker-iscsi
+    - splash-screen

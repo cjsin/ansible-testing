@@ -1,17 +1,23 @@
 ---
 # Decent environment and settings for the maintainer (root)
 
-- name: vim config
+- set_fact:
+    inputrc_block: "{{ lookup('template', 'templates/etc/inputrc.j2') }}"
+    bashrc_block: "{{ lookup('template', 'templates/etc/bash.bashrc.j2') }}"
+
+- name: update inputrc
+  blockinfile: path=/etc/inputrc group=root owner=root mode=0644 state=present block='{{ inputrc_block }}'
+
+- name: update bashrc
+  blockinfile: path=/etc/bash.bashrc group=root owner=root mode=0644 state=present block='{{ bashrc_block }}'
+
+# vimrc is a new file
+- name: vimrc
   template: src=etc/vimrc.j2 dest=/etc/vimrc
 
-- name: inputrc
-  template: src=etc/inputrc.j2 dest=/etc/inputrc
-
+# exrc is a new file
 - name: exrc
   template: src=etc/exrc.j2 dest=/etc/exrc
-
-- name: bashrc
-  template: src=etc/bash.bashrc.j2 dest=/etc/bash.bashrc
 
 - name: less
   template: src=etc/profile.d/less.sh.j2 dest=/etc/profile.d/less.sh

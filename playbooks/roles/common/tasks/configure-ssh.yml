@@ -1,0 +1,6 @@
+
+- name: sshd config
+  template: src=etc/ssh/sshd_config.j2 dest=/etc/ssh/sshd_config
+
+- name: ssh config
+  template: src=etc/ssh/ssh_config.j2 dest=/etc/ssh/ssh_config

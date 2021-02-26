@@ -6,4 +6,4 @@ VAGRANT_HOME: /home/vagrant
 VAGRANT_SRCS: /home/vagrant/playbooks/
 SRCS:         playbooks
 PROVIDER:     libvirt
-
+IPADDR:       192.168.121.159

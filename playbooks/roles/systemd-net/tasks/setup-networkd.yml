@@ -48,6 +48,9 @@
       networkctl status
       networkctl list
       rm -f /var/log/.initrd-rebuilt
+  async: 30
+  poll: 5
+
 
 #- name:     enable delay-net-stop
 #  systemd:  name=delay-net-stop.service daemon_reload=yes enabled=yes started=yes

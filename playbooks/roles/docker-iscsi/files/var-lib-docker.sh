@@ -47,7 +47,7 @@ function check_mounted()
         inf "Already mounted."
         return 0
     elif egrep -q "^${dev}[[:space:]]" /proc/mounts
-    else
+    then
         inf "Mounted in the wrong place."
         umount "${dev}"
     else
@@ -82,23 +82,27 @@ function check_fstab()
 
 function toolish_xfs_process()
 {
+    inf "XFS repair (check filesystem)"
     if ! xfs_repair "${dev}"
     then
+        inf "Need to mount/replay first."
         local tmp_mount="/mnt/${label}-fs-check"
         mkdir -p "${tmp_mount}"
         # xfs will replay logs when mounted.
+        inf "Mounting to ${tmp_mount}"
         mount "${dev}" "${tmp_mount}" || echo "Mount ${dev} failed."
         # now unmount for the xfs_repair to run
+        inf "Unmounting"
         umount "${tmp_mount}"
         rmdir "${tmp_mount}"
+        inf "Retry XFS repair"
         xfs_repair "${dev}"
     fi
 }
 
 function run_fsck()
 {
-    case "${fs_type}"
-    in
+    case "${fs_type}" in
         xfs)
             toolish_xfs_process "${dev}"
             ;;
@@ -126,7 +130,7 @@ function mount_filesystem()
         err "Could not create ${mount_point} ."
         return 1
     fi
-    if ! mount "${dev}"
+    if ! mount "${dev}" -o "${mount_options}" "${mount_point}"
     then
         err "Failed mounting ${dev} ."
         return 1
@@ -139,6 +143,6 @@ check_mounted    && exit 0
 check_fstab
 check_filesystem || exit 1
 
-mount "${mount_point}"
+#mount "${mount_point}"
 #systemctl start var-lib-docker.mount
-#mount_filesystem || exit 1
+mount_filesystem || exit 1

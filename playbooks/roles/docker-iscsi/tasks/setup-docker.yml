@@ -9,9 +9,6 @@
 # Install docker and start a service that will be using the docker
 # partition during a shutdown
 
-- name: Install docker
-  apt: state=present name=docker.io
-
 - name: install requirements for ansible docker support
   apt:
     name:
@@ -20,5 +17,8 @@
       - python3-requestsexceptions
     state: present
 
-- name: enable and start docker
-  systemd: name=docker.service daemon_reload=yes enabled=yes state=started
+- name: Install docker
+  apt: state=present name=docker.io
+  notify: docker-restarted
+
+- meta: flush_handlers
